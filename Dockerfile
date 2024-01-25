@@ -3,7 +3,7 @@
 FROM node:20-alpine AS build_frontend
 WORKDIR /app
 RUN apk add git
-RUN git clone https://github.com/Tyulis/PLSres-website
+RUN git clone https://github.com/PLStek/PLSres-website
 WORKDIR /app/PLSres-website
 RUN npm install -g @angular/cli
 RUN npm install --silent
@@ -18,7 +18,7 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 RUN docker-php-ext-enable pdo_mysql
 
 WORKDIR /build
-RUN git clone https://github.com/Tyulis/PLSapi-legacy
+RUN git clone https://github.com/PLStek/PLSapi-legacy
 
 RUN cp -r /build/PLSapi-legacy/* /var/www/html
 RUN chown www-data /var/www/html
