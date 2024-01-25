@@ -1,12 +1,12 @@
 version: "3"
 services:
   # DB administration :
-  #     Find your bridge network interface with ifconfig, connect to its gateway (IP like 172.XX.1.254)
-  #     with the following port (like http://172.17.1.254:12180), log in to host mariadb, user `root`,
+  #     Find your bridge network interface with ifconfig, connect to its gateway (IP like 172.XX.0.1 or 172.XX.1.254)
+  #     with the following port (like http://172.17.0.1:12180), log in to host mariadb, user `root`,
   #     password is the MARIADB_ROOT_PASSWORD above
   # Reverse proxy setup :
   #     Proxy pass to http://<gateway>:<port>, port is defined just below,
-  #     gateway is the same address as above (172.XX.1.254)
+  #     gateway is the same address as above (172.XX.0.1)
   plsres-website:
     image: plstek/plsres-website
     build: https://github.com/PLStek/PLSres-docker.git
@@ -29,4 +29,4 @@ services:
     image: adminer
     restart: unless-stopped
     ports:
-      - 12180:8080
+      - "12180:8080"
