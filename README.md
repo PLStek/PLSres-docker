@@ -6,4 +6,5 @@ PLSres website deployment with Docker
 
 - Get and fill the `docker-compose.yml` config
 - Run `docker compose up -d`
-- Create the database and user in adminer
+- Configure your reverse proxy
+- Done !
