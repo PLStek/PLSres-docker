@@ -1,9 +1,5 @@
 version: "3"
 services:
-  # DB administration :
-  #     Find your bridge network interface with ifconfig, connect to its gateway (IP like 172.XX.0.1 or 172.XX.1.254)
-  #     with the following port (like http://172.17.0.1:12180), log in to host mariadb, user `root`,
-  #     password is the MARIADB_ROOT_PASSWORD above
   # Reverse proxy setup :
   #     Proxy pass to http://<gateway>:<port>, port is defined just below,
   #     gateway is the same address as above (172.XX.0.1)
@@ -11,22 +7,29 @@ services:
     image: plstek/plsres-website
     build: https://github.com/PLStek/PLSres-docker.git
     ports:
-      - "80:80"
+      - "12038:80"
     restart: unless-stopped
+    depends_on:
+      - plsres-db
     environment:
-      - MYSQL_HOST=plsres-db
-      - MYSQL_DBNAME=plsres    # Create the DB through adminer
-      - MYSQL_USERNAME=plsres  # Create the user and give it privileges on the DB through adminer
-      - MYSQL_PASSWORD=        # Set this : password for the `plsres` user created through adminer
+      - MARIADB_HOST=plsres-db
+      - MARIADB_DBNAME=plsres         # DB name (= MARIADB_DATABASE in plsres-db)
+      - MARIADB_USER=plsres           # User name (= MARIADB_USER in plsres-db)
+      - MARIADB_PASSWORD=REPLACE_THIS # Password for `plsres` (= MARIADB_PASSWORD in plsres-db)
 
   plsres-db:
     image: mariadb
     restart: unless-stopped
     environment:
-      - MARIADB_ROOT_PASSWORD= # Set this : `root` user password for the DB server, to log into adminer
+      - MARIADB_USER=plsres
+      - MARIADB_DATABASE=plsres
+      - MARIADB_PASSWORD=REPLACE_THIS      # Set this : app user password
+      - MARIADB_ROOT_PASSWORD=REPLACE_THIS # Set this : admin user and password for the DB server, to log into adminer
+    volumes:
+      - ./plsres-db:/var/lib/mysql         # External Docker volume to backup
 
-  adminer:
+  plsres-adminer:
     image: adminer
     restart: unless-stopped
     ports:
-      - "12180:8080"
+      - "12171:8080"

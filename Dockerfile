@@ -11,26 +11,21 @@ RUN ng build --configuration production
 
 
 
-FROM php:8.2-fpm-alpine
+FROM python:3.11-alpine
 RUN apk update
-RUN apk add --no-cache nginx git
-RUN docker-php-ext-install pdo pdo_mysql mysqli
-RUN docker-php-ext-enable pdo_mysql
+RUN apk add --no-cache nginx git mariadb-dev build-base
 
-WORKDIR /build
-RUN git clone https://github.com/PLStek/PLSapi-legacy
+WORKDIR /api
+RUN git clone https://github.com/PLStek/PLSapi .
+COPY requirements.txt /api/requirements.txt
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install -r requirements.txt
 
-RUN cp -r /build/PLSapi-legacy/* /var/www/html
-RUN chown www-data /var/www/html
 COPY --chown=www-data:www-data --from=build_frontend /app/PLSres-website/dist/plsres /usr/local/share/nginx
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /usr/local/etc/php-fpm.conf
 COPY entrypoint.sh /usr/local/bin/plsres-entrypoint
 RUN chmod +x /usr/local/bin/plsres-entrypoint
+RUN mkdir -p /run/plsres
 
-RUN rm -rf /build
-
-
-RUN mkdir -p /var/log/php-fpm
 EXPOSE 80
 ENTRYPOINT ["plsres-entrypoint"]
