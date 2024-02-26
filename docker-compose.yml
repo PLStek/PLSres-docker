@@ -13,9 +13,12 @@ services:
       - plsres-db
     environment:
       - MARIADB_HOST=plsres-db
-      - MARIADB_DBNAME=plsres         # DB name (= MARIADB_DATABASE in plsres-db)
-      - MARIADB_USER=plsres           # User name (= MARIADB_USER in plsres-db)
-      - MARIADB_PASSWORD=REPLACE_THIS # Password for `plsres` (= MARIADB_PASSWORD in plsres-db)
+      - MARIADB_DBNAME=plsres              # DB name (= MARIADB_DATABASE in plsres-db)
+      - MARIADB_USER=plsres                # User name (= MARIADB_USER in plsres-db)
+      - MARIADB_PASSWORD=REPLACE_THIS      # Password for `plsres` (= MARIADB_PASSWORD in plsres-db)
+      - TOKEN_SECRET=REPLACE_THIS          # Secret for JWT token
+      - DISCORD_CLIENT_ID=REPLACE_THIS     # Discord client ID for OAuth2
+      - DISCORD_CLIENT_SECRET=REPLACE_THIS # Discord client secret for OAuth2 
 
   plsres-db:
     image: mariadb
