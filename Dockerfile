@@ -17,6 +17,7 @@ RUN apk add --no-cache nginx git mariadb-dev build-base
 
 WORKDIR /api
 RUN git clone https://github.com/PLStek/PLSapi .
+RUN git submodule update --init --recursive
 COPY requirements.txt /api/requirements.txt
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install -r requirements.txt
