@@ -13,12 +13,15 @@ services:
       - plsres-db
     environment:
       - MARIADB_HOST=plsres-db
-      - MARIADB_DBNAME=plsres              # DB name (= MARIADB_DATABASE in plsres-db)
-      - MARIADB_USER=plsres                # User name (= MARIADB_USER in plsres-db)
-      - MARIADB_PASSWORD=REPLACE_THIS      # Password for `plsres` (= MARIADB_PASSWORD in plsres-db)
-      - TOKEN_SECRET=REPLACE_THIS          # Secret for JWT token
-      - DISCORD_CLIENT_ID=REPLACE_THIS     # Discord client ID for OAuth2
-      - DISCORD_CLIENT_SECRET=REPLACE_THIS # Discord client secret for OAuth2 
+      - MARIADB_DBNAME=plsres               # DB name (= MARIADB_DATABASE in plsres-db)
+      - MARIADB_USER=plsres                 # User name (= MARIADB_USER in plsres-db)
+      - MARIADB_PASSWORD=REPLACE_THIS       # Password for `plsres` (= MARIADB_PASSWORD in plsres-db)
+      - STORAGE_PATH=/resources             # Path to store resources
+      - TOKEN_SECRET=REPLACE_THIS           # Secret for JWT token
+      - DISCORD_CLIENT_ID=REPLACE_THIS      # Discord client ID for OAuth2
+      - DISCORD_CLIENT_SECRET=REPLACE_THIS  # Discord client secret for OAuth2
+    volumes:
+      - ./resources:/resources              # External Docker volume to backup
 
   plsres-db:
     image: mariadb
@@ -26,10 +29,10 @@ services:
     environment:
       - MARIADB_USER=plsres
       - MARIADB_DATABASE=plsres
-      - MARIADB_PASSWORD=REPLACE_THIS      # Set this : app user password
-      - MARIADB_ROOT_PASSWORD=REPLACE_THIS # Set this : admin user and password for the DB server, to log into adminer
+      - MARIADB_PASSWORD=REPLACE_THIS       # Set this : app user password
+      - MARIADB_ROOT_PASSWORD=REPLACE_THIS  # Set this : admin user and password for the DB server, to log into adminer
     volumes:
-      - ./plsres-db:/var/lib/mysql         # External Docker volume to backup
+      - ./plsres-db:/var/lib/mysql          # External Docker volume to backup
 
   plsres-adminer:
     image: adminer
